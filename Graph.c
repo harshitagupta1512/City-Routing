@@ -1,37 +1,44 @@
-#include "MyGraph.h"
+#include "project.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
-Graph CreateGraph(int iNumber_of_vertices){
-    Graph G = (Graph)malloc(sizeof(struct stGraph));
+Graph* CreateGraph(int iNumber_of_vertices)
+{
+    Graph* G = (Graph*)malloc(sizeof(struct Graph));
     assert(G != NULL);
 
-    G->iN = iNumber_of_vertices;
+    G->numVertices = iNumber_of_vertices;
 
-    G->pvertex = (Node*)malloc(sizeof(Node)*iNumber_of_vertices);
-    assert(G->pvertex != NULL);
+    //AdjacencyList is the array of pointers to pointers to listnodes 
+    G->adjacencyList = (ListNode**)malloc(sizeof(ListNode*)*iNumber_of_vertices);
+    assert(G->adjacencyList != NULL);
 
+    for(int i=0; i<iNumber_of_vertices; i++)
+    {
+        //G->pvertex[i] = (Node)malloc(sizeof(struct stNode));
+       // assert(G->pvertex[i] != NULL);
 
-    for(int i=0;i<iNumber_of_vertices;i++){
-        G->pvertex[i] = (Node)malloc(sizeof(struct stNode));
-        assert(G->pvertex[i] != NULL);
-
-        G->pvertex[i]->Nodeid = i;
-        G->pvertex[i]->pNext = NULL;
+     //   G->pvertex[i]->Nodeid = i;
+        G->adjacencyList[i]= NULL;
     }
     return G;
 }
 
-void InsertEdge(Graph G, Vertex u, Vertex v){
-    Node temp;
-    temp = G->pvertex[u];
-    int found = 0;
-    Vertex w;
+void InsertEdge(Graph G, Vertex u, Vertex v)
+{
+    ListNode temp;
+    temp = G->adjacencyList[u];
 
-    while(temp != NULL){
-        w = temp->Nodeid;
-        if(v == w){
+    int found = 0;
+    int w;
+
+    while(temp != NULL)
+    {
+        w = temp->dest;
+
+        if(v == w)
+        {
             found = 1;
             break;
         }
@@ -39,16 +46,17 @@ void InsertEdge(Graph G, Vertex u, Vertex v){
     }
 
     if(!found){
-        Node New = (Node)malloc(sizeof(struct stNode));
+        ListNode* New = (ListNode*)malloc(sizeof(struct ListNode));
         assert(New != NULL);
-
-        New->Nodeid = v;
-        New->pNext = temp->pNext;
-        temp->pNext = New;
+        New->dest = v;
+        New->next = temp;
+        temp = New;
     }
+    
     return;
 }
 
+/*
 void DFS(Graph G, Vertex s){
     Node temp = G->pvertex[s];
     Vertex v;
@@ -85,3 +93,4 @@ void DFS_Visit(Graph G,Vertex v,char* pVisited){
     pVisited[v] = 1;
     return;
 }
+*/
