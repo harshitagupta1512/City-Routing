@@ -137,6 +137,7 @@ Graph *CreateGraph(int iNumber_of_vertices)
     //AdjacencyList is the array of pointers to pointers to listnodes
 
     G->adjacencyList = (ListNode **)malloc(sizeof(ListNode *) * iNumber_of_vertices);
+    G->path = (ListNode **)malloc(sizeof(ListNode *) * iNumber_of_vertices);
     assert(G->adjacencyList != NULL);
 
     for (int i = 0; i < iNumber_of_vertices; i++)
@@ -146,19 +147,9 @@ Graph *CreateGraph(int iNumber_of_vertices)
 
         //   G->pvertex[i]->Nodeid = i;
         G->adjacencyList[i] = NULL;
-    }
-
-    G->path = (struct ListNode **)malloc(sizeof(struct ListNode *) * n);
-
-    for (int i = 0; i < n; i++)
-    {
-      //  G->Array[i] = (struct ListNode *)malloc(sizeof(struct ListNode *));
-       // G->Array[i] = NULL;
         G->path[i] = (struct ListNode *)malloc(sizeof(struct ListNode *));
         G->path[i]->dest = i;
         G->path[i]->next = NULL;
-       // G->visited[i] = 0;
-       // G->cost[i] = INF;
     }
 
     return G;
