@@ -18,14 +18,14 @@ struct Graph{
     struct ListNode **path;
 
 };
-
+/*
 #define WHITE  1
 #define GRAY   0
 #define BLACK -1
 #define INFTY  10000
 #define UNKNOWN -1
 #define NOTVERTEX -1
-
+*/
 /*
 struct stGraph{
     int iN;
