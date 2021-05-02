@@ -3,23 +3,52 @@
 #include <stdlib.h>
 #include <assert.h>
 
+int findInVertexArray(char array[][50],char key[50])
+{
+
+}
+
 int main(void)
 {
-    int numPlaces,numStreets;
-    scanf("%d %d",&numPlaces,&numStreets);
-    Graph* City=CreateGraph(numPlaces);
+    int numPlaces, numStreets;
+    scanf("%d %d", &numPlaces, &numStreets);
+    Graph *City = CreateGraph(numPlaces);
 
-    for(int i=0;i<numStreets;i++)
+    int count = 0;
+
+    char vertexArray[numPlaces][50];
+
+    for (int i = 0; i < numStreets; i++)
     {
-        int src,dest;
+        vertex src, dest;
         struct StreetData SD;
-        scanf("%d %d %d %d %d %d %d",src,dest,SD.length,SD.numLanes,SD.num_cars,SD.num_accidents,SD.speed_limit);
-        AddStreet(src,dest,SD);
+
+        scanf("%s %s %d %d %d %d %d", src.vertexName, dest.vertexName, SD.length, SD.numLanes, SD.num_cars, SD.num_accidents, SD.speed_limit);
+
+        if(findInVertexArray(vertexArray, src.vertexName)==0)
+        {
+            vertexArray[count]=src.vertexName;
+            src.vertexId = count;
+            count++;
+        }
+
+        if(findInVertexArray(vertexArray, dest.vertexName)==0)
+        {
+            vertexArray[count]=dest.vertexName;
+            dest.vertexId = count;
+            count++;
+        }
+
+        SD.traffic = 1/(SD.numLanes*10*0.6) + 1/SD.speed_limit*0.4 +  SD.num_cars*1;
+        SD.safety_value = 1 / (SD.num_accidents*0.8) + (0.2 * SD.speed_limit/10)); //Safe Routing
+        SD.weight =  SD.traffic *0.6+ SD.length*0.4;  //Congestion
+
+        AddStreet(City, src, dest, SD);
     }
 
     //-------------City graph is made---------------------//
 
-    int finalSource, finalDestination;
-    scanf("%d %d",&finalSource,&finalDestination);
-    getFastestPath(City,finalSource,finalDestination);
+    vertex finalSource, finalDestination;
+    scanf("%s %s", &finalSource.vertexName, &finalDestination.vertexName);
+    getFastestPath(City, finalSource, finalDestination);
 }
