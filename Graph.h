@@ -10,13 +10,13 @@ typedef struct vertex
     char vertexName[50];
     int vertexId;
 
-}vertex;
+} vertex;
 
-struct Graph{
+struct Graph
+{
     int numVertices; //Number of vertices
-    struct ListNode* adjacencyList;
+    struct ListNode **adjacencyList;
     struct ListNode **path;
-
 };
 /*
 #define WHITE  1
@@ -31,38 +31,38 @@ struct stGraph{
     int iN;
     Node* pvertex;
 };
-
-
 struct stNode{
     int Nodeid;
     Node pNext;
 };
 */
 
-typedef struct ListNode{
-    vertex dest;
-    struct ListNode* next;
-    struct StreetData SD;
-}ListNode;
-
-typedef struct ListNode* head;
-
-struct StreetData{
+struct StreetData
+{
     //int dest;
     int length;
     int traffic;
-    int numLanes;//range = 1-4
-    int num_cars;//Average Number of cars on the street per hour ---- range = 10 - 300
-    int num_accidents;//Average Number of accidents per week -------- range = 1 - 10
-    int speed_limit;//Maximum Speed Limit --- range= 10-100 km/h
-    int weight; //Final weightage/congestion index of the street
+    int numLanes;      //range = 1-4
+    int num_cars;      //Average Number of cars on the street per hour ---- range = 10 - 300
+    int num_accidents; //Average Number of accidents per week -------- range = 1 - 10
+    int speed_limit;   //Maximum Speed Limit --- range= 10-100 km/h
+    int weight;        //Final weightage/congestion index of the street
     int safety_value;
 };
 
-struct Graph* CreateGraph(int n); //n is no of vertices;
+typedef struct ListNode
+{
+    vertex dest;
+    struct ListNode *next;
+    struct StreetData SD;
+} ListNode;
+
+typedef struct ListNode *head;
+
+struct Graph *CreateGraph(int n); //n is no of vertices;
 //struct StreetData* CreateStreetData(int n);
-void AddStreet(vertex src,vertex dest, struct StreetData SD);
-void getFastestPath(struct Graph* G ,vertex src,vertex dest);
+void AddStreet(struct Graph *G, vertex src, vertex dest, struct StreetData SD);
+void getFastestPath(struct Graph *G, vertex src, vertex dest);
 /*
 Graph CreateGraph(int iNumber_of_vertices);
 void InsertEdge(Graph G, Vertex u, Vertex v);
