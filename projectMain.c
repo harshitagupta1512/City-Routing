@@ -2,17 +2,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 
-int findInVertexArray(char array[][50],char key[50])
+int findInVertexArray(char array[][50], char key[50])
 {
-
+    return 1;
 }
 
 int main(void)
 {
     int numPlaces, numStreets;
     scanf("%d %d", &numPlaces, &numStreets);
-    Graph *City = CreateGraph(numPlaces);
+    struct Graph *City = CreateGraph(numPlaces);
 
     int count = 0;
 
@@ -23,25 +24,25 @@ int main(void)
         vertex src, dest;
         struct StreetData SD;
 
-        scanf("%s %s %d %d %d %d %d", src.vertexName, dest.vertexName, SD.length, SD.numLanes, SD.num_cars, SD.num_accidents, SD.speed_limit);
+        scanf("%s %s %d %d %d %d %d", src.vertexName, dest.vertexName, &SD.length, &SD.numLanes, &SD.num_cars, &SD.num_accidents, &SD.speed_limit);
 
-        if(findInVertexArray(vertexArray, src.vertexName)==0)
+        if (findInVertexArray(vertexArray, src.vertexName) == 0)
         {
-            vertexArray[count]=src.vertexName;
+            strcpy(vertexArray[count], src.vertexName);
             src.vertexId = count;
             count++;
         }
 
-        if(findInVertexArray(vertexArray, dest.vertexName)==0)
+        if (findInVertexArray(vertexArray, dest.vertexName) == 0)
         {
-            vertexArray[count]=dest.vertexName;
+            strcpy(vertexArray[count], dest.vertexName);
             dest.vertexId = count;
             count++;
         }
 
-        SD.traffic = 1/(SD.numLanes*10*0.6) + 1/SD.speed_limit*0.4 +  SD.num_cars*1;
-        SD.safety_value = 1 / (SD.num_accidents*0.8) + (0.2 * SD.speed_limit/10)); //Safe Routing
-        SD.weight =  SD.traffic *0.6+ SD.length*0.4;  //Congestion
+        SD.traffic = 1 / (SD.numLanes * 10 * 0.6) + 1 / SD.speed_limit * 0.4 + SD.num_cars * 1;
+        SD.safety_value = 1 / ((SD.num_accidents * 0.8) + (0.2 * SD.speed_limit / 10)); //Safe Routing
+        SD.weight = SD.traffic * 0.6 + SD.length * 0.4;                                 //Congestion
 
         AddStreet(City, src, dest, SD);
     }
@@ -49,6 +50,6 @@ int main(void)
     //-------------City graph is made---------------------//
 
     vertex finalSource, finalDestination;
-    scanf("%s %s", &finalSource.vertexName, &finalDestination.vertexName);
+    scanf("%s %s", finalSource.vertexName, finalDestination.vertexName);
     getFastestPath(City, finalSource, finalDestination);
 }
