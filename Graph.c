@@ -2,8 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <limits.h>
 
-#define INF _INT_MAX_
+#define INF INT_MAX
 
 typedef struct queueNode
 {
@@ -83,7 +84,7 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
 
     visited[src.vertexId] = 1;
 
-  /*  int path[G->numVertices];
+    /*  int path[G->numVertices];
    for (int i = 0; i < G->numVertices; i++)
    {
         path[i] = 0;
@@ -101,7 +102,7 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
 
         while (temp != NULL)
         {
-            if ((x != temp->dest.vertexId) && (cost[temp->dest.vertexId] >= (cost[x] +temp->SD.weight))
+            if ((x != temp->dest.vertexId) && (cost[temp->dest.vertexId] >= (cost[x] + temp->SD.weight)))
             {
                 cost[temp->dest.vertexId] = cost[x] + temp->SD.weight;
                 G->path[temp->SD.weight]->next = G->path[x];
@@ -119,7 +120,7 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
     printf("\nthe shortest path between ' ' and ' ' in map is :");
     while (tempi != NULL)
     {
-        printf("%d", tempi->dest);
+        printf("%d", tempi->dest.vertexId);
         tempi = tempi->next;
         if (tempi != NULL)
             printf("->");
@@ -127,9 +128,9 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
     printf("\n\n");
 }
 
-Graph *CreateGraph(int iNumber_of_vertices)
+struct Graph *CreateGraph(int iNumber_of_vertices)
 {
-    Graph *G = (Graph *)malloc(sizeof(struct Graph));
+    struct Graph *G = (struct Graph *)malloc(sizeof(struct Graph));
     assert(G != NULL);
 
     G->numVertices = iNumber_of_vertices;
@@ -148,14 +149,14 @@ Graph *CreateGraph(int iNumber_of_vertices)
         //   G->pvertex[i]->Nodeid = i;
         G->adjacencyList[i] = NULL;
         G->path[i] = (struct ListNode *)malloc(sizeof(struct ListNode *));
-        G->path[i]->dest = i;
+        G->path[i]->dest.vertexId = i;
         G->path[i]->next = NULL;
     }
 
     return G;
 }
 
-void AddStreet(Graph *G, vertex u, vertex v, struct StreetData SD)
+void AddStreet(struct Graph *G, vertex u, vertex v, struct StreetData SD)
 {
     ListNode *temp;
     temp = G->adjacencyList[u.vertexId];
@@ -167,7 +168,7 @@ void AddStreet(Graph *G, vertex u, vertex v, struct StreetData SD)
     {
         w = temp->dest;
 
-        if (v == w)
+        if (v.vertexId == w.vertexId)
         {
             found = 1;
             break;
@@ -193,14 +194,11 @@ void AddStreet(Graph *G, vertex u, vertex v, struct StreetData SD)
 void DFS(Graph G, Vertex s){
     Node temp = G->pvertex[s];
     Vertex v;
-
     char* pVisited = (char*)malloc(sizeof(char)*G->iN);
     assert(pVisited != NULL);
-
     for(int i=0;i<G->iN;i++){
         pVisited[i] = 0;
     }
-
     while (temp->pNext != NULL)
     {
         v = temp->pNext->Nodeid;
@@ -212,11 +210,9 @@ void DFS(Graph G, Vertex s){
     pVisited[s] = 1;
     return;
 }
-
 void DFS_Visit(Graph G,Vertex v,char* pVisited){
     Node temp = G->pvertex[v];
     Vertex w;
-
     while(temp->pNext != NULL){
         w = temp->pNext->Nodeid;
         if(pVisited[w] == 0)
