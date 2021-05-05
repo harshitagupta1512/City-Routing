@@ -22,6 +22,8 @@ queue *initqueue()
 {
     queue *q;
     q = (queue *)malloc(sizeof(struct queue));
+    q->front = (queueNode *)malloc(sizeof(struct queueNode));
+    q->rear = (queueNode *)malloc(sizeof(struct queueNode));
     q->front = NULL;
     q->rear = NULL;
     return q;
@@ -90,7 +92,7 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
         path[i] = 0;
     }
     path[src.vertexId] = -1;
-*/
+   */
     while (q->front != NULL)
     {
         int x = dequeue(q);
@@ -116,11 +118,12 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
             temp = temp->next;
         }
     }
+
     struct ListNode *tempi = G->path[dest.vertexId];
-    printf("\nthe shortest path between ' ' and ' ' in map is :");
+    printf("\nthe shortest path between '%s' and '%s' in map is :", src.vertexName, dest.vertexName);
     while (tempi != NULL)
     {
-        printf("%d", tempi->dest.vertexId);
+        printf("%s", tempi->dest.vertexName);
         tempi = tempi->next;
         if (tempi != NULL)
             printf("->");
@@ -147,6 +150,7 @@ struct Graph *CreateGraph(int iNumber_of_vertices)
         // assert(G->pvertex[i] != NULL);
 
         //   G->pvertex[i]->Nodeid = i;
+        G->adjacencyList[i] = (struct ListNode *)malloc(sizeof(struct ListNode *));
         G->adjacencyList[i] = NULL;
         G->path[i] = (struct ListNode *)malloc(sizeof(struct ListNode *));
         G->path[i]->dest.vertexId = i;
@@ -187,6 +191,34 @@ void AddStreet(struct Graph *G, vertex u, vertex v, struct StreetData SD)
         temp = New;
     }
 
+    ListNode *tempi;
+    tempi = G->adjacencyList[v.vertexId];
+    int foundi = 0;
+    vertex wi;
+
+    while (tempi != NULL)
+    {
+        wi = tempi->dest;
+        if (u.vertexId == wi.vertexId)
+        {
+            foundi = 1;
+            break;
+        }
+        tempi = tempi->next;
+    }
+
+    if (!foundi)
+    {
+        ListNode *New = (ListNode *)malloc(sizeof(struct ListNode));
+        assert(New != NULL);
+        New->dest = u;
+        New->SD = SD;
+        //Add at beginning
+        New->next = tempi;
+        tempi = New;
+    }
+
+    //printf("%d",G->adjacencylist[u.vertexId])
     return;
 }
 
