@@ -4,9 +4,14 @@
 #include <assert.h>
 #include <string.h>
 
-int findInVertexArray(char array[][50], char key[50])
+int findInVertexArray(char array[][50], char key[50], int n)
 {
-    return 1;
+    for (int i = 0; i < n; i++)
+    {
+        if (strcmp(array[i], key) == 0)
+            return 1;
+    }
+    return 0;
 }
 
 int main(void)
@@ -26,14 +31,14 @@ int main(void)
 
         scanf("%s %s %d %d %d %d %d", src.vertexName, dest.vertexName, &SD.length, &SD.numLanes, &SD.num_cars, &SD.num_accidents, &SD.speed_limit);
 
-        if (findInVertexArray(vertexArray, src.vertexName) == 0)
+        if (findInVertexArray(vertexArray, src.vertexName, count) == 0)
         {
             strcpy(vertexArray[count], src.vertexName);
             src.vertexId = count;
             count++;
         }
 
-        if (findInVertexArray(vertexArray, dest.vertexName) == 0)
+        if (findInVertexArray(vertexArray, dest.vertexName, count) == 0)
         {
             strcpy(vertexArray[count], dest.vertexName);
             dest.vertexId = count;
