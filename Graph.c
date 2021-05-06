@@ -63,7 +63,6 @@ int dequeue(queue *q)
     return x;
 }
 
-//-------------------------------------------------//
 void getFastestPath(struct Graph *G, vertex src, vertex dest)
 {
     queue *q = initqueue();
@@ -86,13 +85,6 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
 
     visited[src.vertexId] = 1;
 
-    /*  int path[G->numVertices];
-   for (int i = 0; i < G->numVertices; i++)
-   {
-        path[i] = 0;
-    }
-    path[src.vertexId] = -1;
-   */
     while (q->front != NULL)
     {
         int x = dequeue(q);
@@ -146,10 +138,6 @@ struct Graph *CreateGraph(int iNumber_of_vertices)
 
     for (int i = 0; i < iNumber_of_vertices; i++)
     {
-        //G->pvertex[i] = (Node)malloc(sizeof(struct stNode));
-        // assert(G->pvertex[i] != NULL);
-
-        //   G->pvertex[i]->Nodeid = i;
         G->adjacencyList[i] = (struct ListNode *)malloc(sizeof(struct ListNode *));
         G->adjacencyList[i] = NULL;
         G->path[i] = (struct ListNode *)malloc(sizeof(struct ListNode *));
@@ -222,36 +210,3 @@ void AddStreet(struct Graph *G, vertex u, vertex v, struct StreetData SD)
     return;
 }
 
-/*
-void DFS(Graph G, Vertex s){
-    Node temp = G->pvertex[s];
-    Vertex v;
-    char* pVisited = (char*)malloc(sizeof(char)*G->iN);
-    assert(pVisited != NULL);
-    for(int i=0;i<G->iN;i++){
-        pVisited[i] = 0;
-    }
-    while (temp->pNext != NULL)
-    {
-        v = temp->pNext->Nodeid;
-        if(pVisited[v] == 0){
-            DFS_Visit(G,v,pVisited);
-        }
-        temp = temp->pNext;
-    }
-    pVisited[s] = 1;
-    return;
-}
-void DFS_Visit(Graph G,Vertex v,char* pVisited){
-    Node temp = G->pvertex[v];
-    Vertex w;
-    while(temp->pNext != NULL){
-        w = temp->pNext->Nodeid;
-        if(pVisited[w] == 0)
-            DFS_Visit(G,w,pVisited);
-        temp = temp->pNext;
-    }
-    pVisited[v] = 1;
-    return;
-}
-*/
