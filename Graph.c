@@ -85,6 +85,8 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
 
     visited[src.vertexId] = 1;
 
+    printf("Done");
+    
     while (q->front != NULL)
     {
         int x = dequeue(q);
@@ -130,7 +132,7 @@ struct Graph *CreateGraph(int iNumber_of_vertices)
 
     G->numVertices = iNumber_of_vertices;
 
-    //AdjacencyList is the array of pointers to pointers to listnodes
+    //AdjacencyList is the array of pointers to listnodes
 
     G->adjacencyList = (ListNode **)malloc(sizeof(ListNode *) * iNumber_of_vertices);
     G->path = (ListNode **)malloc(sizeof(ListNode *) * iNumber_of_vertices);
@@ -138,7 +140,7 @@ struct Graph *CreateGraph(int iNumber_of_vertices)
 
     for (int i = 0; i < iNumber_of_vertices; i++)
     {
-        G->adjacencyList[i] = (struct ListNode *)malloc(sizeof(struct ListNode *));
+        //G->adjacencyList[i] = (struct ListNode *)malloc(sizeof(struct ListNode *));
         G->adjacencyList[i] = NULL;
         G->path[i] = (struct ListNode *)malloc(sizeof(struct ListNode *));
         G->path[i]->dest.vertexId = i;
@@ -152,7 +154,6 @@ void AddStreet(struct Graph *G, vertex u, vertex v, struct StreetData SD)
 {
     ListNode *temp;
     temp = G->adjacencyList[u.vertexId];
-
     int found = 0;
     vertex w;
 
@@ -170,13 +171,14 @@ void AddStreet(struct Graph *G, vertex u, vertex v, struct StreetData SD)
 
     if (!found)
     {
+        temp = G->adjacencyList[u.vertexId];
         ListNode *New = (ListNode *)malloc(sizeof(struct ListNode));
         assert(New != NULL);
         New->dest = v;
         New->SD = SD;
         //Add at beginning
         New->next = temp;
-        temp = New;
+        G->adjacencyList[u.vertexId] = New;
     }
 
     ListNode *tempi;
@@ -197,16 +199,34 @@ void AddStreet(struct Graph *G, vertex u, vertex v, struct StreetData SD)
 
     if (!foundi)
     {
+        tempi = G->adjacencyList[v.vertexId];
         ListNode *New = (ListNode *)malloc(sizeof(struct ListNode));
         assert(New != NULL);
         New->dest = u;
         New->SD = SD;
         //Add at beginning
         New->next = tempi;
-        tempi = New;
+        G->adjacencyList[v.vertexId] = New;
     }
 
     //printf("%d",G->adjacencylist[u.vertexId])
     return;
 }
-
+/*
+8 15
+a b 1 1 1 1 1
+a c 1 1 1 1 1
+a d 1 1 1 1 1
+b d 1 1 1 1 1
+b e 1 1 1 1 1
+c g 1 1 1 1 1
+c d 1 1 1 1 1
+c h 1 1 1 1 1
+d e 1 1 1 1 1
+d g 1 1 1 1 1
+e g 1 1 1 1 1
+e f 1 1 1 1 1
+f h 1 1 1 1 1
+f g 1 1 1 1 1
+g h 1 1 1 1 1
+*/
