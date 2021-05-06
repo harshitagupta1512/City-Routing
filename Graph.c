@@ -85,23 +85,35 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
 
     visited[src.vertexId] = 1;
 
-    printf("Done");
-    
+    printf("Initialisation Done");
+
     while (q->front != NULL)
     {
         int x = dequeue(q);
         visited[x] = 1;
+        printf("x = %d",x);
+
+        struct ListNode *crawl = G->adjacencyList[x];
+        while(crawl!=NULL)
+        {
+             printf("%d ",crawl->dest.vertexId);
+             crawl=crawl->next;
+        }
+        printf("\n");
 
         struct ListNode *temp = G->adjacencyList[x];
-
         int i = 0;
 
         while (temp != NULL)
-        {
+        {   
+            printf("In the loop\n");
+
             if ((x != temp->dest.vertexId) && (cost[temp->dest.vertexId] >= (cost[x] + temp->SD.weight)))
-            {
+            {   
+                printf("In the if block\n");
                 cost[temp->dest.vertexId] = cost[x] + temp->SD.weight;
-                G->path[temp->SD.weight]->next = G->path[x];
+                //G->path[temp->SD.weight]->next = G->path[x];
+                G->path[temp->dest.vertexId]->next = G->path[x];
             }
             if (visited[temp->SD.weight] == 0)
             {
@@ -113,8 +125,18 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
         }
     }
 
-    struct ListNode *tempi = G->path[dest.vertexId];
+    for(int i=0;i<G->numVertices;i++)
+    {
+        struct ListNode* temp=G->path[i];
+        printf("%d ",temp->dest.vertexId);
+    }
+
+    printf("Done");
+
+    struct ListNode *tempi = G->path[dest.vertexId];  //tempi=NULL
+
     printf("\nthe shortest path between '%s' and '%s' in map is :", src.vertexName, dest.vertexName);
+
     while (tempi != NULL)
     {
         printf("%s", tempi->dest.vertexName);
@@ -135,16 +157,19 @@ struct Graph *CreateGraph(int iNumber_of_vertices)
     //AdjacencyList is the array of pointers to listnodes
 
     G->adjacencyList = (ListNode **)malloc(sizeof(ListNode *) * iNumber_of_vertices);
+
     G->path = (ListNode **)malloc(sizeof(ListNode *) * iNumber_of_vertices);
+
     assert(G->adjacencyList != NULL);
 
     for (int i = 0; i < iNumber_of_vertices; i++)
     {
         //G->adjacencyList[i] = (struct ListNode *)malloc(sizeof(struct ListNode *));
         G->adjacencyList[i] = NULL;
-        G->path[i] = (struct ListNode *)malloc(sizeof(struct ListNode *));
+        G->path[i] = (struct ListNode *)malloc(sizeof(struct ListNode));
         G->path[i]->dest.vertexId = i;
         G->path[i]->next = NULL;
+        //G->path[i]=NULL;
     }
 
     return G;
