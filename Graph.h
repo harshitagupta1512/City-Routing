@@ -17,7 +17,7 @@ typedef struct vertex
 
 typedef struct Graph{
     int numVertices; //Number of vertices
-    struct ListNode** adjacencyList;
+    struct ListNode ** adjacencyList;
     struct ListNode **path;
 
 }Graph;
@@ -41,7 +41,6 @@ typedef struct ListNode{
 }ListNode;
 
 typedef struct ListNode* head;
-
 struct Graph* CreateGraph(int n); //n is no of vertices;
 void AddStreet(Graph* G,vertex src,vertex dest, struct StreetData SD);
 void getFastestPath(struct Graph* G ,vertex src,vertex dest);
