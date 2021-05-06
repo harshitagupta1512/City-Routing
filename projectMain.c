@@ -57,4 +57,6 @@ int main(void)
     vertex finalSource, finalDestination;
     scanf("%s %s", finalSource.vertexName, finalDestination.vertexName);
     getFastestPath(City, finalSource, finalDestination);
+
+    
 }
