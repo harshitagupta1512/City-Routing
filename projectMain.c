@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <string.h>
 
+
 int findInVertexArray(char array[][50], char key[50], int n)
 {
     for (int i = 0; i < n; i++)
@@ -16,7 +17,7 @@ int findInVertexArray(char array[][50], char key[50], int n)
 
 int main(void)
 {
-    int numPlaces, numStreets;
+    
     scanf("%d %d", &numPlaces, &numStreets);
     struct Graph *City = CreateGraph(numPlaces);
 
@@ -24,7 +25,7 @@ int main(void)
 
     char vertexArray[numPlaces][50];
 
-    vertex placesAndIDs[numPlaces];
+   
 
     int itr = 0;
     for (int i = 0; i < numStreets; i++)
@@ -79,7 +80,14 @@ int main(void)
 
     //-------------City graph is made---------------------//
 
-    ListNode *temp;
+    //PRINT VERTEX IDS AND NAMES
+
+    for(int i=0;i<numPlaces;i++)
+    {
+        printf("%d %s\n",placesAndIDs[i].vertexId,placesAndIDs[i].vertexName);
+    }
+
+   ListNode *temp;
 
     for (int i = 0; i < numPlaces; i++)
     {
@@ -107,4 +115,7 @@ int main(void)
 
     printf("Final source - %d Final Destination - %d\n",finalSource.vertexId ,finalDestination.vertexId);
     getFastestPath(City, finalSource, finalDestination);
+
+
+  
 }
