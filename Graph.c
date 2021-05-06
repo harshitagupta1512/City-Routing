@@ -65,6 +65,8 @@ int dequeue(queue *q)
 
 void getFastestPath(struct Graph *G, vertex src, vertex dest)
 {
+    printf("FS = %d FD = %d",src.vertexId,dest.vertexId);
+
     queue *q = initqueue();
     enqueue(q, src);
 
@@ -139,7 +141,17 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
 
     while (tempi != NULL)
     {
-        printf("%s", tempi->dest.vertexName);
+      
+        int vr=tempi->dest.vertexId;
+
+        for(int itr=0;itr<numPlaces;itr++)
+        {
+            if(placesAndIDs[itr].vertexId==vr)
+            printf("%s",placesAndIDs[itr].vertexName);
+        }
+
+        printf("(%d)", tempi->dest.vertexId);
+
         tempi = tempi->next;
         if (tempi != NULL)
             printf("->");
