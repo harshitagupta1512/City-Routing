@@ -115,7 +115,7 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
                 //G->path[temp->SD.weight]->next = G->path[x];
                 G->path[temp->dest.vertexId]->next = G->path[x];
             }
-            if (visited[temp->SD.weight] == 0)
+            if (visited[temp->dest.vertexId] == 0)
             {
                 visited[temp->dest.vertexId] = 1;
                 enqueue(q, temp->dest);
