@@ -15,6 +15,9 @@ typedef struct vertex
 
 }vertex;
 
+int numPlaces, numStreets;
+vertex placesAndIDs[1000000];
+
 typedef struct Graph{
     int numVertices; //Number of vertices
     struct ListNode ** adjacencyList;
