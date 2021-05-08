@@ -278,6 +278,18 @@ void UpdateStreet(struct Graph *G, vertex u, vertex v, int cars){
 
     return; 
 }
+void DeleteStreet(struct Graph *G, vertex u, vertex v){
+    ListNode* temp;
+    ListNode* prev;
+    temp = G->adjacencyList[u.vertexId];
+    while(temp->dest.vertexId != v.vertexId){
+        prev = temp;
+        temp = temp->next;
+    }
+    prev->next = temp->next;
+    free(temp);
+    return;
+}
 /*
 8 14
 a b 1 1 1 1 1
