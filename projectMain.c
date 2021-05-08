@@ -4,19 +4,8 @@
 #include <assert.h>
 #include <string.h>
 
-int findInVertexArray(char array[][50], char key[50], int n)
-{
-    for (int i = 0; i < n; i++)
-    {
-        if (strcmp(array[i], key) == 0)
-            return 1;
-    }
-    return 0;
-}
-
 int main(void)
 {
-
     scanf("%d %d", &numPlaces, &numStreets);
     struct Graph *City = CreateGraph(numPlaces);
 
@@ -29,9 +18,10 @@ int main(void)
     {
         vertex src, dest;
         struct StreetData SD;
-
+        // asking user about the details of the graph
         scanf("%s %s %f %d %d %d %d", src.vertexName, dest.vertexName, &SD.length, &SD.numLanes, &SD.num_cars, &SD.num_accidents, &SD.speed_limit);
 
+        // the below code gives unique vertexid for each unique vertexnames entered
         if (findInVertexArray(vertexArray, src.vertexName, count) == 0)
         {
             strcpy(vertexArray[count], src.vertexName);
@@ -67,11 +57,11 @@ int main(void)
             }
         }
 
+        // calculation of traffic and safety_value and weight of each street starts
+        // the formulaes are made assuming all cases
         SD.traffic = 1.00f / (SD.numLanes * 10 * 0.6) + 1.00f / SD.speed_limit * 0.4 + SD.num_cars * 1;
         SD.safety_value = 1.00f / ((SD.num_accidents * 0.8) + (0.2 * SD.speed_limit / 10)); //Safe Routing
         SD.weight = SD.traffic * 0.6 + SD.length * 0.4;                                     //Congestion
-
-        printf("\nCount = %d SrcID = %d DestID = %d\n", count, src.vertexId, dest.vertexId);
         AddStreet(City, src, dest, SD);
     }
 
@@ -79,25 +69,7 @@ int main(void)
 
     //PRINT VERTEX IDS AND NAMES
 
-    for (int i = 0; i < numPlaces; i++)
-    {
-        printf("%d %s\n", placesAndIDs[i].vertexId, placesAndIDs[i].vertexName);
-    }
-
     ListNode *temp;
-
-    for (int i = 0; i < numPlaces; i++)
-    {
-        printf("%d---> ", i);
-        temp = City->adjacencyList[i];
-        while (temp != NULL)
-        {
-            printf(" %d ", temp->dest.vertexId);
-            temp = temp->next;
-        }
-        printf("\n");
-    }
-
     vertex finalSource, finalDestination;
     scanf("%s %s", finalSource.vertexName, finalDestination.vertexName);
 
@@ -112,18 +84,17 @@ int main(void)
 
     printf("Final source - %d Final Destination - %d\n", finalSource.vertexId, finalDestination.vertexId);
     getFastestPath(City, finalSource, finalDestination, 0);
-    //printf("Safest Path from %s to %s is :\n",finalSource.vertexName,finalDestination.vertexName);
     getFastestPath(City, finalSource, finalDestination, 1);
 
+    // asks if the user wants to change the city graph due to marriage prossessions
     printf("\nDo you want to update ur currect location(Y/N)? : ");
-
+    // if the answer is yes then updates the graph
     char q;
     scanf("%*c%c", &q);
     if (q == 'Y')
     {
         printf("Enter the name of your current location : ");
         vertex node;
-        //char nodename[50];
         scanf("%s", node.vertexName);
         int i = 0;
         while (i <= numPlaces)
@@ -131,7 +102,6 @@ int main(void)
             if (strcmp(node.vertexName, placesAndIDs[i].vertexName) == 0)
             {
                 node.vertexId = placesAndIDs[i].vertexId;
-                //strcpy(node.vertexName, placesAndIDs[i].vertexName);
                 break;
             }
             i++;
@@ -175,7 +145,7 @@ int main(void)
         }
 
         getFastestPath(City, node, finalDestination, 0);
-        getFastestPath(City,node,finalDestination,1);
+        getFastestPath(City, node, finalDestination, 1);
 
         /*ListNode *temp = City->adjacencyList[node.vertexId];
         int cars;
