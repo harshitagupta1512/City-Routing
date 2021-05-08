@@ -260,6 +260,20 @@ void AddStreet(struct Graph *G, vertex u, vertex v, struct StreetData SD)
     //printf("%d",G->adjacencylist[u.vertexId])
     return;
 }
+
+void UpdateStreet(struct Graph *G, vertex u, vertex v, int cars){
+    ListNode *temp;
+    temp = G->adjacencyList[u.vertexId];
+    while(temp->dest.vertexId != v.vertexId){
+        temp = temp->next;
+    }
+    temp->SD.num_cars = cars;
+    temp->SD.traffic = 1 / (temp->SD.numLanes * 10 * 0.6) + 1 / temp->SD.speed_limit * 0.4 + temp->SD.num_cars * 1;
+    temp->SD.safety_value = 1 / ((temp->SD.num_accidents * 0.8) + (0.2 * temp->SD.speed_limit / 10)); //Safe Routing
+    temp->SD.weight = temp->SD.traffic * 0.6 + temp->SD.length * 0.4;
+
+    return; 
+}
 /*
 8 14
 a b 1 1 1 1 1
