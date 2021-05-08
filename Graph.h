@@ -27,14 +27,14 @@ typedef struct Graph{
 
 struct StreetData{
     //int dest;
-    int length;
-    int traffic;
+    float length;
+    float traffic;
     int numLanes;//range = 1-4
     int num_cars;//Average Number of cars on the street per hour ---- range = 10 - 300
     int num_accidents;//Average Number of accidents per week -------- range = 1 - 10
     int speed_limit;//Maximum Speed Limit --- range= 10-100 km/h
-    int weight; //Final weightage/congestion index of the street
-    int safety_value;
+    float weight; //Final weightage/congestion index of the street
+    float safety_value;
 };
 
 typedef struct ListNode{
@@ -46,7 +46,8 @@ typedef struct ListNode{
 typedef struct ListNode* head;
 struct Graph* CreateGraph(int n); //n is no of vertices;
 void AddStreet(Graph* G,vertex src,vertex dest, struct StreetData SD);
-void getFastestPath(struct Graph* G ,vertex src,vertex dest);
+void getFastestPath(struct Graph* G ,vertex src,vertex dest,int flag);
+void UpdateStreet(struct Graph *G, vertex u, vertex v, int cars);
 
 
 #endif
