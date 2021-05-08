@@ -4,7 +4,6 @@
 #include <assert.h>
 #include <string.h>
 
-
 int findInVertexArray(char array[][50], char key[50], int n)
 {
     for (int i = 0; i < n; i++)
@@ -17,15 +16,13 @@ int findInVertexArray(char array[][50], char key[50], int n)
 
 int main(void)
 {
-    
+
     scanf("%d %d", &numPlaces, &numStreets);
     struct Graph *City = CreateGraph(numPlaces);
 
     int count = 0;
 
     char vertexArray[numPlaces][50];
-
-   
 
     int itr = 0;
     for (int i = 0; i < numStreets; i++)
@@ -82,12 +79,12 @@ int main(void)
 
     //PRINT VERTEX IDS AND NAMES
 
-    for(int i=0;i<numPlaces;i++)
+    for (int i = 0; i < numPlaces; i++)
     {
-        printf("%d %s\n",placesAndIDs[i].vertexId,placesAndIDs[i].vertexName);
+        printf("%d %s\n", placesAndIDs[i].vertexId, placesAndIDs[i].vertexName);
     }
 
-   ListNode *temp;
+    ListNode *temp;
 
     for (int i = 0; i < numPlaces; i++)
     {
@@ -113,8 +110,9 @@ int main(void)
             finalDestination.vertexId = placesAndIDs[i].vertexId;
     }
 
-    printf("Final source - %d Final Destination - %d\n",finalSource.vertexId ,finalDestination.vertexId);
+    printf("Final source - %d Final Destination - %d\n", finalSource.vertexId, finalDestination.vertexId);
     getFastestPath(City, finalSource, finalDestination);
+
     printf("\nDo you want to update ur currect location(Y/N)? : ");
 
     char q;
@@ -177,5 +175,18 @@ int main(void)
 
         getFastestPath(City, node, finalDestination);
 
-  
+        /*ListNode *temp = City->adjacencyList[node.vertexId];
+        int cars;
+        while (temp->next != NULL)
+        {
+            vertex tmp;
+            tmp = temp->dest;
+            printf("%s -> %s : ", node.vertexName, temp->dest.vertexName);
+            scanf("%d", &cars);
+            UpdateStreet(City, node, tmp, cars);
+            temp = temp->next;
+        }
+        */
+
+    }
 }
