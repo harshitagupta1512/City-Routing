@@ -115,7 +115,67 @@ int main(void)
 
     printf("Final source - %d Final Destination - %d\n",finalSource.vertexId ,finalDestination.vertexId);
     getFastestPath(City, finalSource, finalDestination);
+    printf("\nDo you want to update ur currect location(Y/N)? : ");
 
+    char q;
+    scanf("%*c%c", &q);
+    if (q == 'Y')
+    {
+        printf("Enter the name of your current location : ");
+        vertex node;
+        //char nodename[50];
+        scanf("%s", node.vertexName);
+        int i = 0;
+        while (i <= numPlaces)
+        {
+            if (strcmp(node.vertexName, placesAndIDs[i].vertexName) == 0)
+            {
+                node.vertexId = placesAndIDs[i].vertexId;
+                //strcpy(node.vertexName, placesAndIDs[i].vertexName);
+                break;
+            }
+            i++;
+        }
+        printf("Enter number of streets for which you want to change data for :-");
+        int changeStreetsNum = 0;
+        scanf("%d", &changeStreetsNum);
+
+        printf("Enter the changed streets' data (source destination num_cars)\n");
+
+        for (int i = 0; i < changeStreetsNum; i++)
+        {
+            vertex srcChange, destChange;
+            int carsNum;
+            scanf("%s %s %d", srcChange.vertexName, destChange.vertexName, &carsNum);
+            int i = 0;
+            while (i <= numPlaces)
+            {
+                if (strcmp(srcChange.vertexName, placesAndIDs[i].vertexName) == 0)
+                {
+                    srcChange.vertexId = placesAndIDs[i].vertexId;
+                    break;
+                }
+
+                i++;
+            }
+
+            int j = 0;
+            while (j <= numPlaces)
+            {
+                if (strcmp(destChange.vertexName, placesAndIDs[j].vertexName) == 0)
+                {
+                    destChange.vertexId = placesAndIDs[j].vertexId;
+                    break;
+                }
+                j++;
+            }
+
+            printf("Changing data for %s(%d) -> %s(%d)",srcChange.vertexName,srcChange.vertexId,destChange.vertexName,destChange.vertexId);
+            UpdateStreet(City, srcChange, destChange, carsNum);
+        }
+
+
+        getFastestPath(City, node, finalDestination);
 
   
 }
