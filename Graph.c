@@ -1,28 +1,17 @@
 #include "project.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 #include <limits.h>
 
 #define INF INT_MAX
 
-typedef struct queueNode
-{
-    vertex v;
-    struct queueNode *next;
-} queueNode;
-
-typedef struct queue
-{
-    queueNode *front;
-    queueNode *rear;
-} queue;
-
 queue *initqueue()
 {
     queue *q;
     q = (queue *)malloc(sizeof(struct queue));
-    q->front = (queueNode *)malloc(sizeof(struct queueNode));
+    q->front = (queueNode *)malloc(sizeof(struct queueNode)); // **************** THIS FUNCTION CREATES A QUEUE ************* //
     q->rear = (queueNode *)malloc(sizeof(struct queueNode));
     q->front = NULL;
     q->rear = NULL;
@@ -38,7 +27,7 @@ queue *enqueue(queue *q, vertex x)
 
     if (q->front == NULL)
     {
-        q->front = temp;
+        q->front = temp; // ********* THIS FUNCTION ADDS ELEMENT INTO QUEUE FROM BACKSIDE ******* //
         q->rear = temp;
     }
 
@@ -55,7 +44,7 @@ int dequeue(queue *q)
 {
     int x = q->front->v.vertexId;
 
-    q->front = q->front->next;
+    q->front = q->front->next; // ****** THIS FUNCTION REMOVES AN ELEMENT FROM THE FRONT SIDE OF THE QUEUE ****** //
 
     if (q->front == NULL)
         q->rear = NULL;
@@ -63,227 +52,16 @@ int dequeue(queue *q)
     return x;
 }
 
-void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
+int findInVertexArray(char array[][50], char key[50], int n)
 {
-    //printf("FS = %d FD = %d", src.vertexId, dest.vertexId);
-    if (flag == 0)
+    for (int i = 0; i < n; i++)
     {
-        queue *q = initqueue();
-        enqueue(q, src);
-
-        int cost[G->numVertices];
-
-        for (int i = 0; i < G->numVertices; i++)
-        {
-            cost[i] = INF;
-        }
-
-        cost[src.vertexId] = 0;
-
-        int visited[G->numVertices];
-        for (int i = 0; i < G->numVertices; i++)
-        {
-            visited[i] = 0;
-        }
-
-        visited[src.vertexId] = 1;
-
-        for (int i = 0; i < G->numVertices; i++)
-        {
-            G->path[i]->dest.vertexId = i;
-            G->path[i]->next = NULL;
-        }
-        //printf("Initialisation Done");
-
-        while (q->front != NULL)
-        {
-            int x = dequeue(q);
-            visited[x] = 1;
-            printf("x = %d", x);
-
-            struct ListNode *crawl = G->adjacencyList[x];
-            /*while (crawl != NULL)
-        {
-            printf("%d ", crawl->dest.vertexId);
-            crawl = crawl->next;
-        }
-        printf("\n");*/
-
-            struct ListNode *temp = G->adjacencyList[x];
-            int i = 0;
-
-            while (temp != NULL)
-            {
-                //printf("In the loop\n");
-
-                if ((x != temp->dest.vertexId) && (cost[temp->dest.vertexId] >= (cost[x] + temp->SD.weight)))
-                {
-                    //printf("In the if block\n");
-                    cost[temp->dest.vertexId] = cost[x] + temp->SD.weight;
-                    //G->path[temp->SD.weight]->next = G->path[x];
-                    G->path[temp->dest.vertexId]->next = G->path[x];
-                }
-                if (visited[temp->dest.vertexId] == 0)
-                {
-                    visited[temp->dest.vertexId] = 1;
-                    enqueue(q, temp->dest);
-                }
-
-                temp = temp->next;
-            }
-        }
-
-        for (int i = 0; i < G->numVertices; i++)
-        {
-            struct ListNode *temp = G->path[i];
-            printf("%d ", temp->dest.vertexId);
-        }
-
-        printf("Done");
-
-        //the below code reverses the path list
-        struct ListNode *tempii = G->path[dest.vertexId];
-        struct ListNode *tempi = NULL;
-        struct ListNode *node;
-        while (tempii != NULL)
-        {
-            node = tempii->next;
-            tempii->next = tempi;
-            tempi = tempii;
-            tempii = node;
-        }
-        // the above code reverses the path list
-
-        printf("\nthe shortest path between '%s' and '%s' in map is :", src.vertexName, dest.vertexName);
-
-        while (tempi != NULL)
-        {
-
-            int vr = tempi->dest.vertexId;
-
-            for (int itr = 0; itr < numPlaces; itr++)
-            {
-                if (placesAndIDs[itr].vertexId == vr)
-                    printf("%s", placesAndIDs[itr].vertexName);
-            }
-
-            printf("(%d)", tempi->dest.vertexId);
-
-            tempi = tempi->next;
-            if (tempi != NULL)
-                printf("->");
-        }
-        //printf("\n\n");
+        if (strcmp(array[i], key) == 0) //******** THIS FUNCTION CHECKS IF A PLACE NAME(VERTEX NAME) IS GIVEN BEFORE OR NOT WHILE TAKING THE EDGES AS INPUT*****//
+            return 1;
     }
-    else
-    {
-        queue *q = initqueue();
-        enqueue(q, src);
-
-        float cost[G->numVertices];
-
-        for (int i = 0; i < G->numVertices; i++)
-        {
-            cost[i] = (float)INF;
-        }
-
-        cost[src.vertexId] = 0;
-
-        int visited[G->numVertices];
-        for (int i = 0; i < G->numVertices; i++)
-        {
-            visited[i] = 0;
-        }
-
-        visited[src.vertexId] = 1;
-
-        for (int i = 0; i < G->numVertices; i++)
-        {
-            G->path[i]->dest.vertexId = i;
-            G->path[i]->next = NULL;
-        }
-        //printf("Initialisation Done");
-
-        while (q->front != NULL)
-        {
-            int x = dequeue(q);
-            visited[x] = 1;
-            printf("x = %d", x);
-
-            struct ListNode *crawl = G->adjacencyList[x];
-            /*while (crawl != NULL)
-        {
-            printf("%d ", crawl->dest.vertexId);
-            crawl = crawl->next;
-        }
-        printf("\n");*/
-
-            struct ListNode *temp = G->adjacencyList[x];
-            int i = 0;
-
-            while (temp != NULL)
-            {
-                //printf("In the loop\n");
-                float weight = 1.00f / (temp->SD.safety_value * 100);
-                if ((x != temp->dest.vertexId) && (cost[temp->dest.vertexId] >= (cost[x] + weight)))
-                {
-                    //printf("In the if block\n");
-                    cost[temp->dest.vertexId] = cost[x] + weight;
-                    //G->path[temp->SD.weight]->next = G->path[x];
-                    G->path[temp->dest.vertexId]->next = G->path[x];
-                }
-                if (visited[temp->dest.vertexId] == 0)
-                {
-                    visited[temp->dest.vertexId] = 1;
-                    enqueue(q, temp->dest);
-                }
-
-                temp = temp->next;
-            }
-        }
-        for (int i = 0; i < G->numVertices; i++)
-        {
-            struct ListNode *temp = G->path[i];
-            printf("%d ", temp->dest.vertexId);
-        }
-
-        printf("Done");
-
-        //the below code reverses the path list
-        struct ListNode *tempii = G->path[dest.vertexId];
-        struct ListNode *tempi = NULL;
-        struct ListNode *node;
-        while (tempii != NULL)
-        {
-            node = tempii->next;
-            tempii->next = tempi;
-            tempi = tempii;
-            tempii = node;
-        }
-        // the above code reverses the path list
-
-        printf("\nthe safest path between '%s' and '%s' in map is :", src.vertexName, dest.vertexName);
-
-        while (tempi != NULL)
-        {
-
-            int vr = tempi->dest.vertexId;
-
-            for (int itr = 0; itr < numPlaces; itr++)
-            {
-                if (placesAndIDs[itr].vertexId == vr)
-                    printf("%s", placesAndIDs[itr].vertexName);
-            }
-
-            printf("(%d)", tempi->dest.vertexId);
-
-            tempi = tempi->next;
-            if (tempi != NULL)
-                printf("->");
-        }
-    }
+    return 0;
 }
-
+//****** THE BELOW FUNCTION CREATES A GRAPH ******//
 struct Graph *CreateGraph(int iNumber_of_vertices)
 {
     struct Graph *G = (struct Graph *)malloc(sizeof(struct Graph));
@@ -295,23 +73,24 @@ struct Graph *CreateGraph(int iNumber_of_vertices)
 
     G->adjacencyList = (ListNode **)malloc(sizeof(ListNode *) * iNumber_of_vertices);
 
+    //path is the array of pointers to listnodes
+    //patharray is used to store the shortest paths of everyvertex by separate-chaining method of hashtables
+
     G->path = (ListNode **)malloc(sizeof(ListNode *) * iNumber_of_vertices);
 
     assert(G->adjacencyList != NULL);
 
     for (int i = 0; i < iNumber_of_vertices; i++)
     {
-        //G->adjacencyList[i] = (struct ListNode *)malloc(sizeof(struct ListNode *));
         G->adjacencyList[i] = NULL;
         G->path[i] = (struct ListNode *)malloc(sizeof(struct ListNode));
         G->path[i]->dest.vertexId = i;
         G->path[i]->next = NULL;
-        //G->path[i]=NULL;
     }
 
     return G;
 }
-
+// the below function addes the streets to the graph //
 void AddStreet(struct Graph *G, vertex u, vertex v, struct StreetData SD)
 {
     ListNode *temp;
@@ -330,7 +109,7 @@ void AddStreet(struct Graph *G, vertex u, vertex v, struct StreetData SD)
         }
         temp = temp->next;
     }
-
+    ///// WE USED THE 'FOUND' CONDITION TO CHECK IF THE EDGE ALREADY EXITS OR NOT. IF NOT THEN ADD TO THE GRAPH ////
     if (!found)
     {
         temp = G->adjacencyList[u.vertexId];
@@ -343,6 +122,7 @@ void AddStreet(struct Graph *G, vertex u, vertex v, struct StreetData SD)
         G->adjacencyList[u.vertexId] = New;
     }
 
+    // THE BELOW CODE IS USED TO GIVE THE GRAPH BI-DIRECTIONALITY (WHICH IS STORES EDGES IN BOTH WAYS) //
     ListNode *tempi;
     tempi = G->adjacencyList[v.vertexId];
     int foundi = 0;
@@ -371,10 +151,190 @@ void AddStreet(struct Graph *G, vertex u, vertex v, struct StreetData SD)
         G->adjacencyList[v.vertexId] = New;
     }
 
-    //printf("%d",G->adjacencylist[u.vertexId])
     return;
 }
 
+void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
+{
+    if (flag == 0)
+    {
+        // find the shortest path if flag is 0
+        queue *q = initqueue();
+        enqueue(q, src); // ADDING THE ELEMENTS TO THE QUEUE ACCORDING TO THE BFS //
+
+        int cost[G->numVertices];
+
+        for (int i = 0; i < G->numVertices; i++)
+        {
+            cost[i] = INF; // INITIALIZES THE VALUE TO REACH EACH VERTEX TO INFINITY AS IT WAS NOT POSSIBLE TO REACH AT BEGINING //
+        }
+
+        cost[src.vertexId] = 0;
+
+        int visited[G->numVertices];
+        for (int i = 0; i < G->numVertices; i++)
+        {
+            visited[i] = 0;
+        }
+
+        visited[src.vertexId] = 1;
+
+        for (int i = 0; i < G->numVertices; i++)
+        {
+            G->path[i]->dest.vertexId = i;
+            G->path[i]->next = NULL;
+        }
+
+        while (q->front != NULL)
+        {
+            // CHECKING ALL ELEMENTS ACCORDING TO THE BFS //
+            int x = dequeue(q);
+            visited[x] = 1;
+
+            struct ListNode *crawl = G->adjacencyList[x];
+            struct ListNode *temp = G->adjacencyList[x];
+            int i = 0;
+
+            while (temp != NULL)
+            {
+                // CHECKS ALL ITS NEIGHBOURING VERTICES AND FINDS WHICH ONE IS SHORT
+                if ((x != temp->dest.vertexId) && (cost[temp->dest.vertexId] >= (cost[x] + temp->SD.weight)))
+                {
+                    cost[temp->dest.vertexId] = cost[x] + temp->SD.weight;
+                    G->path[temp->dest.vertexId]->next = G->path[x]; // HERE THE SHORTEST PATH OF EACH VERTEX IS GETTING MODIFIED //
+                }
+                if (visited[temp->dest.vertexId] == 0)
+                {
+                    visited[temp->dest.vertexId] = 1;
+                    enqueue(q, temp->dest);
+                }
+
+                temp = temp->next;
+            }
+        }
+
+        // the below code reverses the path list to print path in correct order (as the path list will be in reverse order for each vertex) //
+        struct ListNode *tempii = G->path[dest.vertexId];
+        struct ListNode *tempi = NULL;
+        struct ListNode *node;
+        while (tempii != NULL)
+        {
+            node = tempii->next;
+            tempii->next = tempi;
+            tempi = tempii;
+            tempii = node;
+        }
+        //the above reverses the path list
+
+        printf("\nthe shortest path between '%s' and '%s' in map is :", src.vertexName, dest.vertexName);
+
+        while (tempi != NULL)
+        {
+            // the below code finds the vertexname for the respective vertexid as we used only the vertexids in path list //
+            int vr = tempi->dest.vertexId;
+            for (int itr = 0; itr < numPlaces; itr++)
+            {
+                if (placesAndIDs[itr].vertexId == vr)
+                    printf("%s", placesAndIDs[itr].vertexName);
+            }
+
+            tempi = tempi->next;
+            if (tempi != NULL)
+                printf("->");
+        }
+    }
+    else
+    {
+        // finds the shortest path if the flag is 1
+        queue *q = initqueue();
+        enqueue(q, src); // ADDING THE ELEMENTS TO THE QUEUE ACCORDING TO THE BFS //
+
+        float cost[G->numVertices];
+
+        for (int i = 0; i < G->numVertices; i++)
+        {
+            cost[i] = (float)INF; // INITIALIZES THE VALUE TO REACH EACH VERTEX TO INFINITY AS IT WAS NOT POSSIBLE TO REACH AT BEGINING //
+        }
+
+        cost[src.vertexId] = 0;
+
+        int visited[G->numVertices];
+        for (int i = 0; i < G->numVertices; i++)
+        {
+            visited[i] = 0;
+        }
+
+        visited[src.vertexId] = 1;
+
+        for (int i = 0; i < G->numVertices; i++)
+        {
+            G->path[i]->dest.vertexId = i;
+            G->path[i]->next = NULL;
+        }
+
+        while (q->front != NULL)
+        {
+            // CHECKING ALL ELEMENTS ACCORDING TO THE BFS //
+            int x = dequeue(q);
+            visited[x] = 1;
+
+            struct ListNode *crawl = G->adjacencyList[x];
+
+            struct ListNode *temp = G->adjacencyList[x];
+            int i = 0;
+
+            while (temp != NULL)
+            {
+                // CHECKS ALL ITS NEIGHBOURING VERTICES AND FINDS WHICH ONE IS SHORT
+                float weight = 1.00f / (temp->SD.safety_value * 100);
+                if ((x != temp->dest.vertexId) && (cost[temp->dest.vertexId] >= (cost[x] + weight)))
+                {
+                    cost[temp->dest.vertexId] = cost[x] + weight;
+                    G->path[temp->dest.vertexId]->next = G->path[x]; // HERE THE SHORTEST PATH OF EACH VERTEX IS GETTING MODIFIED //
+                }
+                if (visited[temp->dest.vertexId] == 0)
+                {
+                    visited[temp->dest.vertexId] = 1;
+                    enqueue(q, temp->dest);
+                }
+
+                temp = temp->next;
+            }
+        }
+
+        // the below code reverses the path list to print path in correct order
+        struct ListNode *tempii = G->path[dest.vertexId];
+        struct ListNode *tempi = NULL;
+        struct ListNode *node;
+        while (tempii != NULL)
+        {
+            node = tempii->next;
+            tempii->next = tempi;
+            tempi = tempii;
+            tempii = node;
+        }
+        // the above code reverses the path list
+
+        printf("\nthe safest path between '%s' and '%s' in map is :", src.vertexName, dest.vertexName);
+
+        while (tempi != NULL)
+        {
+            // the below code finds the vertexname for the respective vertexid as we used only the vertexids in path list //
+            int vr = tempi->dest.vertexId;
+            for (int itr = 0; itr < numPlaces; itr++)
+            {
+                if (placesAndIDs[itr].vertexId == vr)
+                    printf("%s", placesAndIDs[itr].vertexName);
+            }
+
+            tempi = tempi->next;
+            if (tempi != NULL)
+                printf("->");
+        }
+    }
+}
+
+// IN THE MIDDLE OF HIS JOURNEY IF HE FOUNDS TO CHANGE THE DATA OF A STREET DUE TO MARRIAGE PROSSESSIONS, THE BELOW CODE UPDATES THE DATA OF THE ORIGINAL GRAPH //
 void UpdateStreet(struct Graph *G, vertex u, vertex v, int cars)
 {
     ListNode *temp;
@@ -386,7 +346,7 @@ void UpdateStreet(struct Graph *G, vertex u, vertex v, int cars)
     temp->SD.num_cars = cars;
     temp->SD.traffic = 1 / (temp->SD.numLanes * 10 * 0.6) + 1 / temp->SD.speed_limit * 0.4 + temp->SD.num_cars * 1;
     temp->SD.safety_value = 1 / ((temp->SD.num_accidents * 0.8) + (0.2 * temp->SD.speed_limit / 10)); //Safe Routing
-    temp->SD.weight = temp->SD.traffic * 0.6 + temp->SD.length * 0.4;
+    temp->SD.weight = temp->SD.traffic * 0.6 + temp->SD.length * 0.4;                                 // here the weight of edge is calculated
 
     return;
 }
@@ -399,7 +359,7 @@ void DeleteStreet(struct Graph *G, vertex u, vertex v)
     while (temp->dest.vertexId != v.vertexId)
     {
         prev = temp;
-        temp = temp->next;
+        temp = temp->next; //**************** THIS FUNCTION DELETES THE EDGES STORED IN THE MEMORY ********//
     }
     prev->next = temp->next;
     free(temp);
