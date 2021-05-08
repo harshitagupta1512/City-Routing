@@ -30,7 +30,7 @@ int main(void)
         vertex src, dest;
         struct StreetData SD;
 
-        scanf("%s %s %d %d %d %d %d", src.vertexName, dest.vertexName, &SD.length, &SD.numLanes, &SD.num_cars, &SD.num_accidents, &SD.speed_limit);
+        scanf("%s %s %f %d %d %d %d", src.vertexName, dest.vertexName, &SD.length, &SD.numLanes, &SD.num_cars, &SD.num_accidents, &SD.speed_limit);
 
         if (findInVertexArray(vertexArray, src.vertexName, count) == 0)
         {
@@ -67,9 +67,9 @@ int main(void)
             }
         }
 
-        SD.traffic = 1 / (SD.numLanes * 10 * 0.6) + 1 / SD.speed_limit * 0.4 + SD.num_cars * 1;
-        SD.safety_value = 1 / ((SD.num_accidents * 0.8) + (0.2 * SD.speed_limit / 10)); //Safe Routing
-        SD.weight = SD.traffic * 0.6 + SD.length * 0.4;                                 //Congestion
+        SD.traffic = 1.00f / (SD.numLanes * 10 * 0.6) + 1.00f / SD.speed_limit * 0.4 + SD.num_cars * 1;
+        SD.safety_value = 1.00f / ((SD.num_accidents * 0.8) + (0.2 * SD.speed_limit / 10)); //Safe Routing
+        SD.weight = SD.traffic * 0.6 + SD.length * 0.4;                                     //Congestion
 
         printf("\nCount = %d SrcID = %d DestID = %d\n", count, src.vertexId, dest.vertexId);
         AddStreet(City, src, dest, SD);
@@ -111,7 +111,9 @@ int main(void)
     }
 
     printf("Final source - %d Final Destination - %d\n", finalSource.vertexId, finalDestination.vertexId);
-    getFastestPath(City, finalSource, finalDestination);
+    getFastestPath(City, finalSource, finalDestination, 0);
+    //printf("Safest Path from %s to %s is :\n",finalSource.vertexName,finalDestination.vertexName);
+    getFastestPath(City, finalSource, finalDestination, 1);
 
     printf("\nDo you want to update ur currect location(Y/N)? : ");
 
@@ -168,12 +170,12 @@ int main(void)
                 j++;
             }
 
-            printf("Changing data for %s(%d) -> %s(%d)",srcChange.vertexName,srcChange.vertexId,destChange.vertexName,destChange.vertexId);
+            printf("Changing data for %s(%d) -> %s(%d)", srcChange.vertexName, srcChange.vertexId, destChange.vertexName, destChange.vertexId);
             UpdateStreet(City, srcChange, destChange, carsNum);
         }
 
-
-        getFastestPath(City, node, finalDestination);
+        getFastestPath(City, node, finalDestination, 0);
+        getFastestPath(City,node,finalDestination,1);
 
         /*ListNode *temp = City->adjacencyList[node.vertexId];
         int cars;
@@ -187,6 +189,5 @@ int main(void)
             temp = temp->next;
         }
         */
-
     }
 }
