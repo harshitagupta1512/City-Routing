@@ -65,7 +65,7 @@ int dequeue(queue *q)
 
 void getFastestPath(struct Graph *G, vertex src, vertex dest)
 {
-    printf("FS = %d FD = %d",src.vertexId,dest.vertexId);
+    printf("FS = %d FD = %d", src.vertexId, dest.vertexId);
 
     queue *q = initqueue();
     enqueue(q, src);
@@ -93,13 +93,13 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
     {
         int x = dequeue(q);
         visited[x] = 1;
-        printf("x = %d",x);
+        printf("x = %d", x);
 
         struct ListNode *crawl = G->adjacencyList[x];
-        while(crawl!=NULL)
+        while (crawl != NULL)
         {
-             printf("%d ",crawl->dest.vertexId);
-             crawl=crawl->next;
+            printf("%d ", crawl->dest.vertexId);
+            crawl = crawl->next;
         }
         printf("\n");
 
@@ -107,11 +107,11 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
         int i = 0;
 
         while (temp != NULL)
-        {   
+        {
             printf("In the loop\n");
 
             if ((x != temp->dest.vertexId) && (cost[temp->dest.vertexId] >= (cost[x] + temp->SD.weight)))
-            {   
+            {
                 printf("In the if block\n");
                 cost[temp->dest.vertexId] = cost[x] + temp->SD.weight;
                 //G->path[temp->SD.weight]->next = G->path[x];
@@ -127,27 +127,38 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
         }
     }
 
-    for(int i=0;i<G->numVertices;i++)
+    for (int i = 0; i < G->numVertices; i++)
     {
-        struct ListNode* temp=G->path[i];
-        printf("%d ",temp->dest.vertexId);
+        struct ListNode *temp = G->path[i];
+        printf("%d ", temp->dest.vertexId);
     }
 
     printf("Done");
 
-    struct ListNode *tempi = G->path[dest.vertexId];  //tempi=NULL
-
+   //the below code reverses the path list
+    struct ListNode *tempii = G->path[dest.vertexId];
+    struct ListNode *tempi = NULL;
+    struct ListNode *node;
+    while (tempii != NULL)
+    {
+        node = tempii->next;
+        tempii->next = tempi;
+        tempi = tempii;
+        tempii = node;
+    }
+    // the above code reverses the path list
+    
     printf("\nthe shortest path between '%s' and '%s' in map is :", src.vertexName, dest.vertexName);
 
     while (tempi != NULL)
     {
-      
-        int vr=tempi->dest.vertexId;
 
-        for(int itr=0;itr<numPlaces;itr++)
+        int vr = tempi->dest.vertexId;
+
+        for (int itr = 0; itr < numPlaces; itr++)
         {
-            if(placesAndIDs[itr].vertexId==vr)
-            printf("%s",placesAndIDs[itr].vertexName);
+            if (placesAndIDs[itr].vertexId == vr)
+                printf("%s", placesAndIDs[itr].vertexName);
         }
 
         printf("(%d)", tempi->dest.vertexId);
@@ -250,13 +261,12 @@ void AddStreet(struct Graph *G, vertex u, vertex v, struct StreetData SD)
     return;
 }
 /*
-8 15
+8 14
 a b 1 1 1 1 1
 a c 1 1 1 1 1
 a d 1 1 1 1 1
 b d 1 1 1 1 1
 b e 1 1 1 1 1
-c g 1 1 1 1 1
 c d 1 1 1 1 1
 c h 1 1 1 1 1
 d e 1 1 1 1 1
