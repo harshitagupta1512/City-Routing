@@ -65,7 +65,7 @@ int dequeue(queue *q)
 
 void getFastestPath(struct Graph *G, vertex src, vertex dest)
 {
-    printf("FS = %d FD = %d", src.vertexId, dest.vertexId);
+    //printf("FS = %d FD = %d", src.vertexId, dest.vertexId);
 
     queue *q = initqueue();
     enqueue(q, src);
@@ -87,7 +87,11 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
 
     visited[src.vertexId] = 1;
 
-    printf("Initialisation Done");
+    for(int i=0;i<G->numVertices;i++){
+        G->path[i]->dest.vertexId = i;
+        G->path[i]->next = NULL;
+    }
+    //printf("Initialisation Done");
 
     while (q->front != NULL)
     {
@@ -96,23 +100,23 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
         printf("x = %d", x);
 
         struct ListNode *crawl = G->adjacencyList[x];
-        while (crawl != NULL)
+        /*while (crawl != NULL)
         {
             printf("%d ", crawl->dest.vertexId);
             crawl = crawl->next;
         }
-        printf("\n");
+        printf("\n");*/
 
         struct ListNode *temp = G->adjacencyList[x];
         int i = 0;
 
         while (temp != NULL)
         {
-            printf("In the loop\n");
+            //printf("In the loop\n");
 
             if ((x != temp->dest.vertexId) && (cost[temp->dest.vertexId] >= (cost[x] + temp->SD.weight)))
             {
-                printf("In the if block\n");
+                //printf("In the if block\n");
                 cost[temp->dest.vertexId] = cost[x] + temp->SD.weight;
                 //G->path[temp->SD.weight]->next = G->path[x];
                 G->path[temp->dest.vertexId]->next = G->path[x];
@@ -167,7 +171,7 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest)
         if (tempi != NULL)
             printf("->");
     }
-    printf("\n\n");
+    //printf("\n\n");
 }
 
 struct Graph *CreateGraph(int iNumber_of_vertices)
