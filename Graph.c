@@ -63,115 +63,225 @@ int dequeue(queue *q)
     return x;
 }
 
-void getFastestPath(struct Graph *G, vertex src, vertex dest)
+void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
 {
     //printf("FS = %d FD = %d", src.vertexId, dest.vertexId);
-
-    queue *q = initqueue();
-    enqueue(q, src);
-
-    int cost[G->numVertices];
-
-    for (int i = 0; i < G->numVertices; i++)
+    if (flag == 0)
     {
-        cost[i] = INF;
-    }
+        queue *q = initqueue();
+        enqueue(q, src);
 
-    cost[src.vertexId] = 0;
+        int cost[G->numVertices];
 
-    int visited[G->numVertices];
-    for (int i = 0; i < G->numVertices; i++)
-    {
-        visited[i] = 0;
-    }
+        for (int i = 0; i < G->numVertices; i++)
+        {
+            cost[i] = INF;
+        }
 
-    visited[src.vertexId] = 1;
+        cost[src.vertexId] = 0;
 
-    for(int i=0;i<G->numVertices;i++){
-        G->path[i]->dest.vertexId = i;
-        G->path[i]->next = NULL;
-    }
-    //printf("Initialisation Done");
+        int visited[G->numVertices];
+        for (int i = 0; i < G->numVertices; i++)
+        {
+            visited[i] = 0;
+        }
 
-    while (q->front != NULL)
-    {
-        int x = dequeue(q);
-        visited[x] = 1;
-        printf("x = %d", x);
+        visited[src.vertexId] = 1;
 
-        struct ListNode *crawl = G->adjacencyList[x];
-        /*while (crawl != NULL)
+        for (int i = 0; i < G->numVertices; i++)
+        {
+            G->path[i]->dest.vertexId = i;
+            G->path[i]->next = NULL;
+        }
+        //printf("Initialisation Done");
+
+        while (q->front != NULL)
+        {
+            int x = dequeue(q);
+            visited[x] = 1;
+            printf("x = %d", x);
+
+            struct ListNode *crawl = G->adjacencyList[x];
+            /*while (crawl != NULL)
         {
             printf("%d ", crawl->dest.vertexId);
             crawl = crawl->next;
         }
         printf("\n");*/
 
-        struct ListNode *temp = G->adjacencyList[x];
-        int i = 0;
+            struct ListNode *temp = G->adjacencyList[x];
+            int i = 0;
 
-        while (temp != NULL)
-        {
-            //printf("In the loop\n");
-
-            if ((x != temp->dest.vertexId) && (cost[temp->dest.vertexId] >= (cost[x] + temp->SD.weight)))
+            while (temp != NULL)
             {
-                //printf("In the if block\n");
-                cost[temp->dest.vertexId] = cost[x] + temp->SD.weight;
-                //G->path[temp->SD.weight]->next = G->path[x];
-                G->path[temp->dest.vertexId]->next = G->path[x];
+                //printf("In the loop\n");
+
+                if ((x != temp->dest.vertexId) && (cost[temp->dest.vertexId] >= (cost[x] + temp->SD.weight)))
+                {
+                    //printf("In the if block\n");
+                    cost[temp->dest.vertexId] = cost[x] + temp->SD.weight;
+                    //G->path[temp->SD.weight]->next = G->path[x];
+                    G->path[temp->dest.vertexId]->next = G->path[x];
+                }
+                if (visited[temp->dest.vertexId] == 0)
+                {
+                    visited[temp->dest.vertexId] = 1;
+                    enqueue(q, temp->dest);
+                }
+
+                temp = temp->next;
             }
-            if (visited[temp->dest.vertexId] == 0)
-            {
-                visited[temp->dest.vertexId] = 1;
-                enqueue(q, temp->dest);
-            }
-
-            temp = temp->next;
-        }
-    }
-
-    for (int i = 0; i < G->numVertices; i++)
-    {
-        struct ListNode *temp = G->path[i];
-        printf("%d ", temp->dest.vertexId);
-    }
-
-    printf("Done");
-
-   //the below code reverses the path list
-    struct ListNode *tempii = G->path[dest.vertexId];
-    struct ListNode *tempi = NULL;
-    struct ListNode *node;
-    while (tempii != NULL)
-    {
-        node = tempii->next;
-        tempii->next = tempi;
-        tempi = tempii;
-        tempii = node;
-    }
-    // the above code reverses the path list
-    
-    printf("\nthe shortest path between '%s' and '%s' in map is :", src.vertexName, dest.vertexName);
-
-    while (tempi != NULL)
-    {
-
-        int vr = tempi->dest.vertexId;
-
-        for (int itr = 0; itr < numPlaces; itr++)
-        {
-            if (placesAndIDs[itr].vertexId == vr)
-                printf("%s", placesAndIDs[itr].vertexName);
         }
 
-        printf("(%d)", tempi->dest.vertexId);
+        for (int i = 0; i < G->numVertices; i++)
+        {
+            struct ListNode *temp = G->path[i];
+            printf("%d ", temp->dest.vertexId);
+        }
 
-        tempi = tempi->next;
-        if (tempi != NULL)
-            printf("->");
+        printf("Done");
+
+        //the below code reverses the path list
+        struct ListNode *tempii = G->path[dest.vertexId];
+        struct ListNode *tempi = NULL;
+        struct ListNode *node;
+        while (tempii != NULL)
+        {
+            node = tempii->next;
+            tempii->next = tempi;
+            tempi = tempii;
+            tempii = node;
+        }
+        // the above code reverses the path list
+
+        printf("\nthe shortest path between '%s' and '%s' in map is :", src.vertexName, dest.vertexName);
+
+        while (tempi != NULL)
+        {
+
+            int vr = tempi->dest.vertexId;
+
+            for (int itr = 0; itr < numPlaces; itr++)
+            {
+                if (placesAndIDs[itr].vertexId == vr)
+                    printf("%s", placesAndIDs[itr].vertexName);
+            }
+
+            printf("(%d)", tempi->dest.vertexId);
+
+            tempi = tempi->next;
+            if (tempi != NULL)
+                printf("->");
+        }
+        //printf("\n\n");
     }
-    //printf("\n\n");
+    else
+    {
+        queue *q = initqueue();
+        enqueue(q, src);
+
+        float cost[G->numVertices];
+
+        for (int i = 0; i < G->numVertices; i++)
+        {
+            cost[i] = (float)INF;
+        }
+
+        cost[src.vertexId] = 0;
+
+        int visited[G->numVertices];
+        for (int i = 0; i < G->numVertices; i++)
+        {
+            visited[i] = 0;
+        }
+
+        visited[src.vertexId] = 1;
+
+        for (int i = 0; i < G->numVertices; i++)
+        {
+            G->path[i]->dest.vertexId = i;
+            G->path[i]->next = NULL;
+        }
+        //printf("Initialisation Done");
+
+        while (q->front != NULL)
+        {
+            int x = dequeue(q);
+            visited[x] = 1;
+            printf("x = %d", x);
+
+            struct ListNode *crawl = G->adjacencyList[x];
+            /*while (crawl != NULL)
+        {
+            printf("%d ", crawl->dest.vertexId);
+            crawl = crawl->next;
+        }
+        printf("\n");*/
+
+            struct ListNode *temp = G->adjacencyList[x];
+            int i = 0;
+
+            while (temp != NULL)
+            {
+                //printf("In the loop\n");
+                float weight = 1.00f / (temp->SD.safety_value * 100);
+                if ((x != temp->dest.vertexId) && (cost[temp->dest.vertexId] >= (cost[x] + weight)))
+                {
+                    //printf("In the if block\n");
+                    cost[temp->dest.vertexId] = cost[x] + weight;
+                    //G->path[temp->SD.weight]->next = G->path[x];
+                    G->path[temp->dest.vertexId]->next = G->path[x];
+                }
+                if (visited[temp->dest.vertexId] == 0)
+                {
+                    visited[temp->dest.vertexId] = 1;
+                    enqueue(q, temp->dest);
+                }
+
+                temp = temp->next;
+            }
+        }
+        for (int i = 0; i < G->numVertices; i++)
+        {
+            struct ListNode *temp = G->path[i];
+            printf("%d ", temp->dest.vertexId);
+        }
+
+        printf("Done");
+
+        //the below code reverses the path list
+        struct ListNode *tempii = G->path[dest.vertexId];
+        struct ListNode *tempi = NULL;
+        struct ListNode *node;
+        while (tempii != NULL)
+        {
+            node = tempii->next;
+            tempii->next = tempi;
+            tempi = tempii;
+            tempii = node;
+        }
+        // the above code reverses the path list
+
+        printf("\nthe safest path between '%s' and '%s' in map is :", src.vertexName, dest.vertexName);
+
+        while (tempi != NULL)
+        {
+
+            int vr = tempi->dest.vertexId;
+
+            for (int itr = 0; itr < numPlaces; itr++)
+            {
+                if (placesAndIDs[itr].vertexId == vr)
+                    printf("%s", placesAndIDs[itr].vertexName);
+            }
+
+            printf("(%d)", tempi->dest.vertexId);
+
+            tempi = tempi->next;
+            if (tempi != NULL)
+                printf("->");
+        }
+    }
 }
 
 struct Graph *CreateGraph(int iNumber_of_vertices)
@@ -265,10 +375,12 @@ void AddStreet(struct Graph *G, vertex u, vertex v, struct StreetData SD)
     return;
 }
 
-void UpdateStreet(struct Graph *G, vertex u, vertex v, int cars){
+void UpdateStreet(struct Graph *G, vertex u, vertex v, int cars)
+{
     ListNode *temp;
     temp = G->adjacencyList[u.vertexId];
-    while(temp->dest.vertexId != v.vertexId){
+    while (temp->dest.vertexId != v.vertexId)
+    {
         temp = temp->next;
     }
     temp->SD.num_cars = cars;
@@ -276,13 +388,16 @@ void UpdateStreet(struct Graph *G, vertex u, vertex v, int cars){
     temp->SD.safety_value = 1 / ((temp->SD.num_accidents * 0.8) + (0.2 * temp->SD.speed_limit / 10)); //Safe Routing
     temp->SD.weight = temp->SD.traffic * 0.6 + temp->SD.length * 0.4;
 
-    return; 
+    return;
 }
-void DeleteStreet(struct Graph *G, vertex u, vertex v){
-    ListNode* temp;
-    ListNode* prev;
+
+void DeleteStreet(struct Graph *G, vertex u, vertex v)
+{
+    ListNode *temp;
+    ListNode *prev;
     temp = G->adjacencyList[u.vertexId];
-    while(temp->dest.vertexId != v.vertexId){
+    while (temp->dest.vertexId != v.vertexId)
+    {
         prev = temp;
         temp = temp->next;
     }
@@ -290,6 +405,7 @@ void DeleteStreet(struct Graph *G, vertex u, vertex v){
     free(temp);
     return;
 }
+
 /*
 8 14
 a b 1 1 1 1 1
