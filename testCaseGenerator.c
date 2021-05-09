@@ -12,7 +12,7 @@ int main()
     scanf("%d", &n);
     for (int i = 0; i < n; i++)
     {
-        a = rand() % 100 + 1;
+        a = rand() % 1000 + 1;
         b = rand() % 4 + 1;
         c = rand() % 291 + 10;
         d = rand() % 10 + 1;
