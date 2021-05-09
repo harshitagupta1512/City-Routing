@@ -23,7 +23,7 @@ Assuming the Graph (City map) is connected and undirected.
    3.DELETE STREET IN THE CITY MAP
    4.CHANGE THE STREET DATA FOR ANY STREET
    5.EXIT
-   Enter you choice(1/2/3/4/5)
+   Enter you choice(1/2/3/4/5/6)
 
 4. If user enters choice 1 
 User now need the enter from where he has to start and where he has to go .
@@ -73,5 +73,32 @@ For the test cases we use a testcase generator that is a block of code which whe
 the paramters for numStreets different streets in appropriate range.
 
 
+Here is a sample test case 
+9 14
+home b 625 4 137 6 93
+b c 126 1 185 9 23
+c d 961 4 22 9 95
+d exam 590 2 92 4 98
+exam f 957 2 167 9 62
+f g 886 4 127 5 56
+g h 246 1 275 9 64
+h home 123 4 247 3 70
+h b 578 1 188 3 83
+h i 765 2 225 2 100
+g i 733 3 119 1 75
+i c 119 2 98 2 45
+f c 659 1 275 9 57
+f d 385 1 113 9 61
+1
+home exam
+2
+home exam
+3
+f g
+4
+h i 500
+1
+home exam
+5
 
 
