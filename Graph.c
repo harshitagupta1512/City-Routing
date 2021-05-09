@@ -166,11 +166,14 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
         queue *q = initqueue();
         enqueue(q, src); // ADDING THE ELEMENTS TO THE QUEUE ACCORDING TO THE BFS //
 
-        int cost[G->numVertices];
-
+        float cost[G->numVertices];
+        float length[G->numVertices];
+        float safetyvalue[G->numVertices];
         for (int i = 0; i < G->numVertices; i++)
         {
             cost[i] = INF; // INITIALIZES THE VALUE TO REACH EACH VERTEX TO INFINITY AS IT WAS NOT POSSIBLE TO REACH AT BEGINING //
+            length[i] = 0;
+            safetyvalue[i] = 0.00f;
         }
 
         cost[src.vertexId] = 0;
@@ -205,6 +208,8 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
                 if ((x != temp->dest.vertexId) && (cost[temp->dest.vertexId] >= (cost[x] + temp->SD.weight)))
                 {
                     cost[temp->dest.vertexId] = cost[x] + temp->SD.weight;
+                    length[temp->dest.vertexId] = length[x] + temp->SD.length;
+                    safetyvalue[temp->dest.vertexId] = safetyvalue[x] + (temp->SD.safety_value);
                     G->path[temp->dest.vertexId]->next = G->path[x]; // HERE THE SHORTEST PATH OF EACH VERTEX IS GETTING MODIFIED //
                 }
                 if (visited[temp->dest.vertexId] == 0)
@@ -230,8 +235,8 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
         }
         //the above reverses the path list
 
-        printf("\nThe Fastest path (with minimum congestion) between '%s' and '%s' in map is :", src.vertexName, dest.vertexName);
-
+        printf("\nThe Fastest path (with minimum congestion) between '%s' and '%s' in map is :\n\n", src.vertexName, dest.vertexName);
+        printf("\t\t\t");
         while (tempi != NULL)
         {
             // the below code finds the vertexname for the respective vertexid as we used only the vertexids in path list //
@@ -247,7 +252,9 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
             if (tempi != NULL)
                 printf("->");
         }
-
+        printf("\n\nEstimated Distance to cover: %.2fm\n", length[dest.vertexId]);
+        printf("Congestion Value: %.2f\n", cost[dest.vertexId]);
+        printf("Safety Value: %.2f\n",safetyvalue[dest.vertexId]);
     }
 
     else
@@ -258,10 +265,16 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
         enqueue(q, src); // ADDING THE ELEMENTS TO THE QUEUE ACCORDING TO THE BFS //
 
         float cost[G->numVertices];
-
+        float length[G->numVertices];
+        float weights[G->numVertices];
+        float safetyvalue[G->numVertices];
+        
         for (int i = 0; i < G->numVertices; i++)
         {
             cost[i] = (float)INF; // INITIALIZES THE VALUE TO REACH EACH VERTEX TO INFINITY AS IT WAS NOT POSSIBLE TO REACH AT BEGINING //
+            length[i] = 0;
+            weights[i] = 0;
+            safetyvalue[i] = 0.00f;
         }
 
         cost[src.vertexId] = 0;
@@ -298,6 +311,9 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
                 if ((x != temp->dest.vertexId) && (cost[temp->dest.vertexId] >= (cost[x] + weight)))
                 {
                     cost[temp->dest.vertexId] = cost[x] + weight;
+                    length[temp->dest.vertexId] = length[x] + temp->SD.length;
+                    weights[temp->dest.vertexId] = weights[x] + temp->SD.weight;
+                    safetyvalue[temp->dest.vertexId] = safetyvalue[x] + (temp->SD.safety_value);
                     G->path[temp->dest.vertexId]->next = G->path[x]; // HERE THE SHORTEST PATH OF EACH VERTEX IS GETTING MODIFIED //
                 }
                 if (visited[temp->dest.vertexId] == 0)
@@ -323,8 +339,8 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
         }
         // the above code reverses the path list
 
-        printf("\nThe safest path (with maximum safety value) between '%s' and '%s' in map is :", src.vertexName, dest.vertexName);
-
+        printf("\nThe safest path (with maximum safety value) between '%s' and '%s' in map is :\n\n", src.vertexName, dest.vertexName);
+        printf("\t\t\t");
         while (tempi != NULL)
         {
             // the below code finds the vertexname for the respective vertexid as we used only the vertexids in path list //
@@ -339,8 +355,10 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
             if (tempi != NULL)
                 printf("->");
         }
+        printf("\n\nEstimated Distance to cover: %.2fm\n", length[dest.vertexId]);
+        printf("Congestion Value:%.2f\n",weights[dest.vertexId]);
+        printf("Safety Value: %.2f\n", safetyvalue[dest.vertexId]);
     }
-
     printf("\n");
 }
 
@@ -389,21 +407,3 @@ void DeleteStreet(struct Graph *G, vertex u, vertex v)
     free(temp);
     return;
 }
-
-/*
-8 14
-a b 1 1 1 1 1
-a c 1 1 1 1 1
-a d 1 1 1 1 1
-b d 1 1 1 1 1
-b e 1 1 1 1 1
-c d 1 1 1 1 1
-c h 1 1 1 1 1
-d e 1 1 1 1 1
-d g 1 1 1 1 1
-e g 1 1 1 1 1
-e f 1 1 1 1 1
-f h 1 1 1 1 1
-f g 1 1 1 1 1
-g h 1 1 1 1 1
-*/
