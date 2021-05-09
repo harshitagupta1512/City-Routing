@@ -23,7 +23,7 @@ Assuming the Graph (City map) is connected and undirected.
    3.DELETE STREET IN THE CITY MAP
    4.CHANGE THE STREET DATA FOR ANY STREET
    5.EXIT
-   Enter you choice(1/2/3/4/5/6)
+   Enter you choice(1/2/3/4/5)
 
 4. If user enters choice 1 
 User now need the enter from where he has to start and where he has to go .
