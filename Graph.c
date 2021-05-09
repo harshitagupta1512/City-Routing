@@ -247,6 +247,7 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
             if (tempi != NULL)
                 printf("->");
         }
+
     }
 
     else
@@ -371,7 +372,7 @@ void DeleteStreet(struct Graph *G, vertex u, vertex v)
     ListNode *temp;
     ListNode *prev;
     temp = G->adjacencyList[u.vertexId];
-    
+
     while ((temp != NULL) && (temp->dest.vertexId != v.vertexId))
     {
         prev = temp;
