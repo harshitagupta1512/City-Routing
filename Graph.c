@@ -160,6 +160,9 @@ void AddStreet(struct Graph *G, vertex u, vertex v, struct StreetData SD)
 
 void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
 {
+    if (src.vertexId == -1 || dest.vertexId == -1)
+        return;
+
     if (flag == 0)
     {
         // find the shortest path if flag is 0
@@ -254,7 +257,7 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
         }
         printf("\n\nEstimated Distance to cover: %.2fm\n", length[dest.vertexId]);
         printf("Congestion Value: %.2f\n", cost[dest.vertexId]);
-        printf("Safety Value: %.2f\n",safetyvalue[dest.vertexId]);
+        printf("Safety Value: %.2f\n", safetyvalue[dest.vertexId]);
     }
 
     else
@@ -268,7 +271,7 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
         float length[G->numVertices];
         float weights[G->numVertices];
         float safetyvalue[G->numVertices];
-        
+
         for (int i = 0; i < G->numVertices; i++)
         {
             cost[i] = (float)INF; // INITIALIZES THE VALUE TO REACH EACH VERTEX TO INFINITY AS IT WAS NOT POSSIBLE TO REACH AT BEGINING //
@@ -356,7 +359,7 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
                 printf("->");
         }
         printf("\n\nEstimated Distance to cover: %.2fm\n", length[dest.vertexId]);
-        printf("Congestion Value:%.2f\n",weights[dest.vertexId]);
+        printf("Congestion Value:%.2f\n", weights[dest.vertexId]);
         printf("Safety Value: %.2f\n", safetyvalue[dest.vertexId]);
     }
     printf("\n");
@@ -365,6 +368,9 @@ void getFastestPath(struct Graph *G, vertex src, vertex dest, int flag)
 // IN THE MIDDLE OF HIS JOURNEY IF HE FOUNDS TO CHANGE THE DATA OF A STREET DUE TO MARRIAGE PROSSESSIONS, THE BELOW CODE UPDATES THE DATA OF THE ORIGINAL GRAPH //
 void UpdateStreet(struct Graph *G, vertex u, vertex v, int cars)
 {
+    if (u.vertexId == -1 || v.vertexId == -1)
+        return;
+
     ListNode *temp;
     temp = G->adjacencyList[u.vertexId];
     while ((temp != NULL) && temp->dest.vertexId != v.vertexId)
@@ -381,12 +387,16 @@ void UpdateStreet(struct Graph *G, vertex u, vertex v, int cars)
     temp->SD.safety_value = 1 / ((temp->SD.num_accidents * 0.8) + (0.2 * temp->SD.speed_limit / 10)); //Safe Routing
     temp->SD.weight = temp->SD.traffic * 0.6 + temp->SD.length * 0.4;                                 // here the weight of edge is calculated
 
+    printf("Done\n");
     return;
 }
 
 void DeleteStreet(struct Graph *G, vertex u, vertex v)
 {
     //**************** THIS FUNCTION DELETES THE EDGES STORED IN THE MEMORY ********//
+    if (u.vertexId == -1 || v.vertexId == -1)
+        return;
+
     ListNode *temp;
     ListNode *prev;
     temp = G->adjacencyList[u.vertexId];
