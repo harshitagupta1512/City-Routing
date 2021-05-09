@@ -1,13 +1,6 @@
 #ifndef _ROUTING_
 #define _ROUTING_
 
-#define WHITE 1
-#define GRAY 0
-#define BLACK -1
-#define INFTY 10000
-#define UNKNOWN -1
-#define NOTVERTEX -1
-
 typedef struct vertex
 {
     char vertexName[50]; //name of the street given by the user
@@ -16,8 +9,8 @@ typedef struct vertex
 } vertex;
 
 int numPlaces, numStreets;
-vertex placesAndIDs[1000000]; //stores the place names and ids
 
+char placesAndIDs[100000][50]; //stores the place names and ids
 typedef struct Graph
 {
     int numVertices;                 //Number of vertices
