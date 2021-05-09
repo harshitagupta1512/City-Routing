@@ -11,6 +11,9 @@ int getVertexID(vertex v)
         if (strcmp(placesAndIDs[i], v.vertexName) == 0)
             return i;
     }
+
+    printf("**No such place exists in the city map**\n");
+    return -1;
 }
 
 int main(void)
@@ -149,7 +152,7 @@ int main(void)
                 UpdateStreet(City, srcChange, destChange, carsNum);
             }
 
-            printf("Done\n");
+            //printf("Done\n");
             break;
 
         case 5:
